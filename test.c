@@ -22,7 +22,11 @@ int main() {
     assert(sum_prob == 1.0);
 
     SamplerState* sampler = get_sampler(probs, 10);
-    printf("sampled: %d", sample_wor(sampler));
+
+    #ifdef DEBUG
+    printf("main(): received sampler, root label = %d\n", sampler->root->label);
+    #endif
+    printf("sampled: %d\n", sample_wor(sampler));
     //TreeNode* root = init_tree(probs, 10);
     //printf("root label = %d\n", root->label);
     //print_tree(root);

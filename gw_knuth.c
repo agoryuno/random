@@ -80,7 +80,7 @@ static void build(
         int* r,
         int* t,
         int* m,
-        TreeNode** nodes
+        TreeNode*** nodes
     ) {
     int j = *m;
 
@@ -91,32 +91,32 @@ static void build(
 
     if (d[*t]==b) {
         l[j] = *t;
-        nodes[j]->LLINK = nodes[*t];
-        nodes[j]->LLINK->parent = nodes[j];
+        (*nodes)[j]->LLINK = (*nodes)[*t];
+        (*nodes)[j]->LLINK->parent = (*nodes)[j];
         (*t)++;
     } else {
         (*m)--; 
         l[j] = *m;
-        nodes[j]->LLINK = nodes[*m];
-        nodes[j]->LLINK->parent = nodes[j];
+        (*nodes)[j]->LLINK = (*nodes)[*m];
+        (*nodes)[j]->LLINK->parent = (*nodes)[j];
         build(b+1, d, l, r, t, m, nodes);
     }
     if (d[*t]==b) {
         r[j] = *t;
-        nodes[j]->RLINK = nodes[*t];
-        nodes[j]->RLINK->parent = nodes[j];
+        (*nodes)[j]->RLINK = (*nodes)[*t];
+        (*nodes)[j]->RLINK->parent = (*nodes)[j];
         (*t)++;
     } else {
         (*m)--; 
         r[j] = *m; 
-        nodes[j]->RLINK = nodes[*m];
-        nodes[j]->RLINK->parent = nodes[j];
+        (*nodes)[j]->RLINK = (*nodes)[*m];
+        (*nodes)[j]->RLINK->parent = (*nodes)[j];
         build(b+1, d, l, r, t, m, nodes);
     }
     #ifdef DEBUG
     printf(" node %d = %d + %d\n", j, l[j], r[j]);
-    printf("llink %d prob=%f\n", nodes[j]->LLINK->label, nodes[j]->LLINK->WT);
-    printf("rlink %d prob=%f\n", nodes[j]->RLINK->label, nodes[j]->RLINK->WT);
+    printf("llink %d prob=%f\n", (*nodes)[j]->LLINK->label, (*nodes)[j]->LLINK->WT);
+    printf("rlink %d prob=%f\n", (*nodes)[j]->RLINK->label, (*nodes)[j]->RLINK->WT);
     #endif
 }
 
@@ -145,9 +145,9 @@ static void bottom_up(TreeNode* node) {
     }
 }
 
-static inline void assign_probs(TreeNode** nodes, int n) {
+static inline void assign_probs(TreeNode*** nodes, int n) {
     for (int i = 0; i <= n; i++) {
-        bottom_up(nodes[i]->parent);
+        bottom_up((*nodes)[i]->parent);
     }
 }
 
@@ -185,7 +185,7 @@ TreeNode* init_tree(double* probs, int N, TreeNode*** nodes) {
         (*nodes)[j]->label = j;
         (*nodes)[j]->parent = NULL;
         #ifdef DEBUG
-        printf("creeated node %d, label=%d, prob=%f\n", j, nodes[j]->label, nodes[j]->WT);
+        printf("created node %d, label=%d, prob=%f\n", j, (*nodes)[j]->label, (*nodes)[j]->WT);
         #endif
     }
 
@@ -197,7 +197,7 @@ TreeNode* init_tree(double* probs, int N, TreeNode*** nodes) {
         (*nodes)[j]->label = j;
         (*nodes)[j]->parent = NULL;
         #ifdef DEBUG
-        printf("creeated node %d, label=%d, prob=%f\n", j, nodes[j]->label, nodes[j]->WT);
+        printf("creeated node %d, label=%d, prob=%f\n", j, (*nodes)[j]->label, (*nodes)[j]->WT);
         #endif
     }
 
@@ -240,15 +240,15 @@ TreeNode* init_tree(double* probs, int N, TreeNode*** nodes) {
 
     #ifdef DEBUG
     for (int j = 0; j <= n; j++) {
-        printf("node %d, ", nodes[j]->label);
+        printf("node %d, ", (*nodes)[j]->label);
     }
     printf("\n");
     for (int j = n+1; j<= 2*n; j++) {
-        printf("node %d: G=%f, H=%f\n", nodes[j]->label, nodes[j]->G, nodes[j]->H);
+        printf("node %d: G=%f, H=%f\n", (*nodes)[j]->label, (*nodes)[j]->G, (*nodes)[j]->H);
     }
     #endif
 
-    return nodes[2*n];
+    return (*nodes)[2*n];
 }
 
 

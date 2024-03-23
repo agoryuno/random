@@ -1,4 +1,9 @@
+#ifdef DEBUG
+#include <stdio.h>
+#endif
+
 #include "sample_wor.h"
+
 
 
 // initializes a sampler and returns a pointer
@@ -13,15 +18,24 @@ SamplerState* get_sampler (double* probs, int N) {
     state->left_par = (TreeNode**)malloc(sizeof(TreeNode)*(N*2-1));
     //state->nodes_idx = (int*)malloc(sizeof(int)*(N*2-1));
     TreeNode* root = init_tree(probs, N, &state->nodes);
+
+    #ifdef DEBUG
+    printf( "get_sampler(): tree initialized\n");
+    #endif
+
     state->root = root;
     state->probs = probs;
     state->N = N;
     state->node_idx = 0;
+
+    #ifdef DEBUG
+    printf("get_sampler(): state initialized, root label = %d\n", state->root->label);
+    #endif
     return state;
 }
 
 
-// call this once you are done with the sampler
+// call this when you are done with the sampler
 // to free its memory
 void destroy_sampler(SamplerState* state) {
     destroy_tree(state->root);
@@ -39,13 +53,27 @@ void restart_sampler(SamplerState* state) {
 
 // returns a number between 0 and n-1
 int sample_wor(SamplerState* state) {
+
+    #ifdef DEBUG
+    printf("entered sample_wor()\n");
+    #endif
+
     TreeNode* node = state->root;
     //TreeNode* left_par[ (state->N*2)-1 ];
 
-    double rnum = rand();
+    double rnum = (double)rand() / RAND_MAX;  // Generate a random number between 0 and 1
+    //double rnum = rand();
     double C = 0.0;
 
+    #ifdef DEBUG
+    printf("sample_wor(): rnum=%f, C=%f\n", rnum, C);
+    #endif
+
     while ( (node->LLINK != NULL) || (node->RLINK != NULL) ) {
+
+        #ifdef DEBUG
+
+        #endif
         if (node->LLINK != NULL) {
             if ( rnum < node->G + C )  {
                 state->left_par[state->node_idx] = node;

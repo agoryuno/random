@@ -3,6 +3,7 @@
 
 #include "gw_knuth.h"
 
+
 typedef struct {
     
     TreeNode* root;
