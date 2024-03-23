@@ -4,9 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#ifdef DEBUG
 #include <stdio.h>
-#endif
 
 typedef struct tree_node {
     int label;

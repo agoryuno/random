@@ -1,7 +1,7 @@
 #include <stdio.h>
 //#include <stdlib.h>
 //#include <math.h>
-//#include <time.h>
+#include <time.h>
 #include <assert.h>
 
 //#include "tree.h"
@@ -9,7 +9,7 @@
 #include "sample_wor.h"
 
 int main() {
-    //srand(time(NULL));
+    srand(time(NULL));
     //double random_number = (double)rand() / RAND_MAX;  // Generate a random number between 0 and 1
 
     //int vals[] = {0,1,2,3,4,5,6,7,8,9};
@@ -26,7 +26,10 @@ int main() {
     #ifdef DEBUG
     printf("main(): received sampler, root label = %d\n", sampler->root->label);
     #endif
-    printf("sampled: %d\n", sample_wor(sampler));
+
+    for (int i=0; i<=2; i++) {
+        printf("sampled: %d\n", sample_wor(sampler));
+    }
     //TreeNode* root = init_tree(probs, 10);
     //printf("root label = %d\n", root->label);
     //print_tree(root);

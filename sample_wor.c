@@ -66,33 +66,83 @@ int sample_wor(SamplerState* state) {
     double C = 0.0;
 
     #ifdef DEBUG
-    printf("sample_wor(): rnum=%f, C=%f\n", rnum, C);
+    printf("sample_wor(): rnum=%f, C=%f", rnum, C);
     #endif
 
+    int i = 0;
     while ( (node->LLINK != NULL) || (node->RLINK != NULL) ) {
-
+        i++;
         #ifdef DEBUG
-
+        printf("while %d: C = %f:\n", i, C);
         #endif
+
         if (node->LLINK != NULL) {
+
+            #ifdef DEBUG
+            printf("  llink present\n");
+            #endif
+            
             if ( rnum < node->G + C )  {
+
+                #ifdef DEBUG
+                printf("  rnum < G + C, llink label = %d \n", node->LLINK->label);
+                #endif
+
+                
                 state->left_par[state->node_idx] = node;
                 state->node_idx++;
                 node = node->LLINK;
                 continue;
             } else {
+
+                #ifdef DEBUG
+                printf("  rnum >= G + C\n");
+                #endif
+
                 if (node->RLINK == NULL) {
+
+                    #ifdef DEBUG
+                    printf("  no rlink\n");
+                    #endif
+
                     break;
                 } else {
+                    #ifdef DEBUG
+                    printf("  rlink present\n");
+                    #endif
+
                     C += node->G;
                     node = node->RLINK;
                 }
             }
-        } 
+        } else {
+            #ifdef DEBUG
+            printf("no llink\n");
+            #endif
+        }
+        
+        
     }
 
-    for (int j = 0; j <= state->node_idx; j++) {
+    #ifdef DEBUG
+    printf("out of while loop: node_idx = %d, node label = %d\n", 
+        state->node_idx,
+        node->label);
+    #endif
+
+    for (int j = 0; j < state->node_idx; j++) {
+        #ifdef DEBUG
+        printf("in for loop, j = %d: \n", j);
+        printf("  state->left_par[j]->label = %d\n", state->left_par[j]->label);
+
+        #endif
+
         state->left_par[j]->G -= node->WT;
     }
+
+    #ifdef DEBUG
+    printf("\n");
+    #endif
+
     return node->label;
 }
