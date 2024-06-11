@@ -1,5 +1,5 @@
-#ifndef SAMPLE_WOR_H 1
-#define SAMPLE_WOR_H 1
+#ifndef SAMPLE_WOR_H
+#define SAMPLE_WOR_H
 
 #include "gw_knuth.h"
 

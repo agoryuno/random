@@ -30,6 +30,8 @@ int main() {
     for (int i=0; i<=2; i++) {
         printf("sampled: %d\n", sample_wor(sampler));
     }
+
+    destroy_sampler(sampler);
     //TreeNode* root = init_tree(probs, 10);
     //printf("root label = %d\n", root->label);
     //print_tree(root);

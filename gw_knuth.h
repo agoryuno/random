@@ -1,5 +1,5 @@
-#ifndef GW_KNUTH_H 1
-#define GW_KNUTH_H 1
+#ifndef GW_KNUTH_H
+#define GW_KNUTH_H
 
 #include <stdlib.h>
 #include <math.h>
