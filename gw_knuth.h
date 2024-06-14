@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 
+
 typedef struct tree_node {
     int label;
     double WT;

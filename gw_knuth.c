@@ -31,12 +31,18 @@ static void combine(
         q[j] = q[j+1]; 
         v[j] = v[j+1];
     }
-    for (j=k-2; q[j] < x; j--) {
-        q[j+1] = q[j];
-        v[j+1] = v[j];
+
+    if (k-2 >= 0) {
+        for (j=k-2; q[j] < x; j--) {
+            q[j+1] = q[j];
+            v[j+1] = v[j];
+        }
+    
+        q[j+1] = x; 
+        v[j+1] = *m;
+    } else {
+        j = -1;
     }
-    q[j+1] = x; 
-    v[j+1] = *m;
     
     #ifdef DEBUG
     printf("combine(): ");
@@ -44,10 +50,12 @@ static void combine(
     printf("\n");
     #endif
 
-    while ((j>0) && (q[j-1] <= x)) {
-        d = *t - j; 
-        combine(j, l, r, t, w, v, q, m); 
-        j = *t - d;
+    if (j > 0) {
+        while ((j>0) && (q[j-1] <= x)) {
+            d = *t - j; 
+            combine(j, l, r, t, w, v, q, m); 
+            j = *t - d;
+        }
     }
 }
 
@@ -151,7 +159,6 @@ static inline void assign_probs(TreeNode*** nodes, int n) {
     }
 }
 
-
 TreeNode* init_tree(double* probs, int N, TreeNode*** nodes) {
 
     int size = N*2 + 1;
@@ -170,7 +177,7 @@ TreeNode* init_tree(double* probs, int N, TreeNode*** nodes) {
     t = 1;
 
     #ifdef DEBUG
-    printf("init_tree(): N=%d, n=%d, size=%d\n", N, n, size);
+        printf("init_tree(): N=%d, n=%d, size=%d\n", N, n, size);
     #endif
 
     for (int j = 0; j <= m; j++) {
