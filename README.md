@@ -12,4 +12,6 @@ After creating a sampler, you can pass it repeatedly to function `sample_wor(Sam
 
 Note, that by default the sampler will crash the program if you try to sample more than N values. To make it return a NULL instead comment out the `-DABORT_ON_OVERSAMPLE` flag in the Makefile before building.
 
+Also note, that currently there is no way to reset the sampler object to its initial state. This is because the specific application this was built for doesn't require that functionality. This means that once you've sampled `N` values, you need to `destroy_sampler(SamplerState* state)` your current sampler and create a new one.
+
 For an example of using the sampler see `test.c`.
