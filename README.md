@@ -1,6 +1,6 @@
 # Weighted sampling without replacement
 
-An implementation of the CK Wong & M. Easton algorithm for weighted sampling without replacement [paper](https://www.researchgate.net/publication/220617264_An_Efficient_Method_for_Weighted_Sampling_Without_Replacement?enrichId=rgreq-e42f11ef98e6b1a82cacfdc5209e459d-XXX&enrichSource=Y292ZXJQYWdlOzIyMDYxNzI2NDtBUzoxMTAyMzgyODgwNjA0MTZAMTQwMzI5NDI2NDM5MQ%3D%3D&el=1_x_2&_esc=publicationCoverPdf) in pure C.
+An implementation of the CK Wong & M. Easton algorithm for weighted sampling without replacement ([paper](https://www.researchgate.net/publication/220617264_An_Efficient_Method_for_Weighted_Sampling_Without_Replacement?enrichId=rgreq-e42f11ef98e6b1a82cacfdc5209e459d-XXX&enrichSource=Y292ZXJQYWdlOzIyMDYxNzI2NDtBUzoxMTAyMzgyODgwNjA0MTZAMTQwMzI5NDI2NDM5MQ%3D%3D&el=1_x_2&_esc=publicationCoverPdf)) in pure C.
 
 The Garsia-Wachs algorithm is used for constructing the underlying balanced tree, for details see sec. 6.2.2 in "The Art of Computer Programming. Vol. 3: Searching and Sorting" by Donald Knuth.
 
