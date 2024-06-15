@@ -27,7 +27,7 @@ int main() {
     printf("main(): received sampler, root label = %d\n", sampler->root->label);
     #endif
 
-    for (int i=0; i<=2; i++) {
+    for (int i=0; i<=11; i++) {
         printf("sampled: %d\n", sample_wor(sampler));
     }
 
@@ -35,7 +35,9 @@ int main() {
 
     for (int i = 0; i < sampler->N; i++) {
         printf("%d: ", i);
-        printf("%d\n", sampler->nodes[i]->label);
+        printf("%d | WT = %f, G = %f \n", sampler->nodes[i]->label,
+            sampler->nodes[i]->WT,
+            sampler->nodes[i]->G);
     }
     destroy_sampler(sampler);
     //TreeNode* root = init_tree(probs, 10);

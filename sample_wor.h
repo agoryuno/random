@@ -11,9 +11,11 @@ typedef struct {
     TreeNode** left_par;
     //int** nodes_idx;
     double* probs;
+    double Q;
     int N;
     int size;
     int node_idx;
+    int sampled;
 
 } SamplerState;
 

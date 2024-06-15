@@ -31,6 +31,8 @@ SamplerState* get_sampler (double* probs, int N) {
     TreeNode* root = init_tree(probs, N, &state->nodes);
 
     state->N = N;
+    state->sampled = 0;
+    state->Q = sum_probs(state);
 
     #ifdef DEBUG
     printf( "get_sampler(): tree initialized\n");
@@ -67,6 +69,13 @@ void restart_sampler(SamplerState* state) {
 // returns a number between 0 and n-1
 int sample_wor(SamplerState* state) {
 
+    // guard against sampling more times
+    // than there are leaves in the treee
+    if (state->sampled >= state->N) {
+        fprintf(stderr, "Attempting to sample over N. N = %d, already made %d samples. Aborting!\n",
+        state->N, state->sampled);
+        exit(EXIT_FAILURE);
+    }
     #ifdef DEBUG
     printf("entered sample_wor()\n");
     #endif
@@ -76,12 +85,12 @@ int sample_wor(SamplerState* state) {
 
     // Q is the sum of probabilities of all
     // remaining leaves
-    double Q = sum_probs(state);
+    double Q = state->Q;
     double rnum = ((double)rand() / RAND_MAX ) * Q; 
     double C = 0.0;
 
     #ifdef DEBUG_PRINT
-        printf("sample_wor(): rnum=%f, C=%f\n", rnum, C);
+        printf("sample_wor(): rnum=%f, C=%f, Q=%f\n", rnum, C, Q);
     #endif
 
     int i = 0;
@@ -153,8 +162,18 @@ int sample_wor(SamplerState* state) {
         #endif
 
         state->left_par[j]->G -= node->WT;
+        // reset left_par
+        state->left_par[j] = NULL;
     }
 
+    // decrease the value of Q
+    state->Q -= node->WT;
+
+    // reset visited left nodes count
+    state->node_idx = 0;
+
+    // increment the sampled counter
+    state->sampled++;
     #ifdef DEBUG
     printf("\n");
     #endif
