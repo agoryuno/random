@@ -7,7 +7,7 @@ LIBS = -lm
 BUILD_DIR = build
 OUTPUT_DIR = .
 
-BUILD_FLAGS = #-DDEBUG_PRINT
+BUILD_FLAGS = -DABORT_ON_OVERSAMPLE #-DDEBUG_PRINT
 
 SRC_FILES = test.c gw_knuth.c sample_wor.c
 

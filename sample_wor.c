@@ -72,13 +72,14 @@ int sample_wor(SamplerState* state) {
     // guard against sampling more times
     // than there are leaves in the treee
     if (state->sampled >= state->N) {
-        fprintf(stderr, "Attempting to sample over N. N = %d, already made %d samples. Aborting!\n",
-        state->N, state->sampled);
-        exit(EXIT_FAILURE);
+        #ifdef ABORT_ON_OVERSAMPLE
+            fprintf(stderr, "Attempting to sample over N. N = %d, already made %d samples. Aborting!\n",
+                state->N, state->sampled);
+            exit(EXIT_FAILURE);
+        #else
+            return NULL;
+        #endif
     }
-    #ifdef DEBUG
-    printf("entered sample_wor()\n");
-    #endif
 
     TreeNode* node = state->root;
     //TreeNode* left_par[ (state->N*2)-1 ];

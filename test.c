@@ -23,7 +23,7 @@ int main() {
 
     SamplerState* sampler = get_sampler(probs, 10);
 
-    #ifdef DEBUG
+    #ifdef DEBUG_PRINT
     printf("main(): received sampler, root label = %d\n", sampler->root->label);
     #endif
 
@@ -40,15 +40,10 @@ int main() {
             sampler->nodes[i]->G);
     }
     destroy_sampler(sampler);
-    //TreeNode* root = init_tree(probs, 10);
-    //printf("root label = %d\n", root->label);
-    //print_tree(root);
-    
-    //#ifdef DEBUG
-    //printf("PROGRAM FINISHED\n");
-    //print_tree(root, 0);
-    //#endif
 
-    //destroy_tree(root);
+    sampler = get_sampler(probs, 10);
+    for (int i=0; i<10; i++) {
+        printf("sampled: %d\n", sample_wor(sampler));
+    }
     return 0;
 }
