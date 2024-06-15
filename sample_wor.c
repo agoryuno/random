@@ -51,6 +51,25 @@ void restart_sampler(SamplerState* state) {
 
 }
 
+
+// find all leaves and return the sum of their 
+// probabilities
+double sum_probs(TreeNode* node) {
+    if (node == NULL) {
+        return 0.0;
+    }
+
+    // Check if the current node is a leaf
+    if (node->LLINK == NULL && node->RLINK == NULL) {
+        return node->WT;
+    }
+
+    // Recursively visit left and right subtrees
+    double left_sum = sum_probs(node->LLINK);
+    double right_sum = sum_probs(node->RLINK);
+    return left_sum + right_sum;
+}
+
 // returns a number between 0 and n-1
 int sample_wor(SamplerState* state) {
 
@@ -61,31 +80,35 @@ int sample_wor(SamplerState* state) {
     TreeNode* node = state->root;
     //TreeNode* left_par[ (state->N*2)-1 ];
 
-    double rnum = (double)rand() / RAND_MAX;  // Generate a random number between 0 and 1
+    // Q is the sum of probabilities of all
+    // remaining leaves
+    double Q = sum_probs(state->root);
+    double rnum = ((double)rand() / RAND_MAX ) * Q; 
     //double rnum = rand();
     double C = 0.0;
 
-    #ifdef DEBUG
-    printf("sample_wor(): rnum=%f, C=%f", rnum, C);
+    #ifdef DEBUG_PRINT
+        printf("sample_wor(): rnum=%f, C=%f\n", rnum, C);
     #endif
 
     int i = 0;
     while ( (node->LLINK != NULL) || (node->RLINK != NULL) ) {
         i++;
-        #ifdef DEBUG
-        printf("while %d: C = %f:\n", i, C);
+        #ifdef DEBUG_PRINT
+            printf("while %d: C = %f:\n", i, C);
         #endif
 
         if (node->LLINK != NULL) {
 
-            #ifdef DEBUG
-            printf("  llink present\n");
+            #ifdef DEBUG_PRINT
+                printf("  llink present\n");
             #endif
             
             if ( rnum < node->G + C )  {
 
-                #ifdef DEBUG
-                printf("  rnum < G + C, llink label = %d \n", node->LLINK->label);
+                #ifdef DEBUG_PRINT
+                    printf("  rnum < G + C (%f + %f = %f), llink label = %d \n", 
+                        node->G, C, node->G + C, node->LLINK->label);
                 #endif
 
                 
@@ -95,20 +118,21 @@ int sample_wor(SamplerState* state) {
                 continue;
             } else {
 
-                #ifdef DEBUG
-                printf("  rnum >= G + C\n");
+                #ifdef DEBUG_PRINT
+                    printf("  rnum >= G + C (%f + %f = %f\n",
+                        node->G, C, node->G + C);
                 #endif
 
                 if (node->RLINK == NULL) {
 
-                    #ifdef DEBUG
-                    printf("  no rlink\n");
+                    #ifdef DEBUG_PRINT
+                        printf("  no rlink\n");
                     #endif
 
                     break;
                 } else {
-                    #ifdef DEBUG
-                    printf("  rlink present\n");
+                    #ifdef DEBUG_PRINT
+                        printf("  rlink present\n");
                     #endif
 
                     C += node->G;
@@ -116,8 +140,8 @@ int sample_wor(SamplerState* state) {
                 }
             }
         } else {
-            #ifdef DEBUG
-            printf("no llink\n");
+            #ifdef DEBUG_PRINT
+                printf("no llink\n");
             #endif
         }
         

@@ -32,17 +32,13 @@ static void combine(
         v[j] = v[j+1];
     }
 
-    if (k-2 >= 0) {
-        for (j=k-2; q[j] < x; j--) {
-            q[j+1] = q[j];
-            v[j+1] = v[j];
-        }
-    
-        q[j+1] = x; 
-        v[j+1] = *m;
-    } else {
-        j = -1;
+    for (j=k-2; q[j] < x; j--) {
+        q[j+1] = q[j];
+        v[j+1] = v[j];
     }
+
+    q[j+1] = x; 
+    v[j+1] = *m;
     
     #ifdef DEBUG
     printf("combine(): ");
@@ -50,12 +46,10 @@ static void combine(
     printf("\n");
     #endif
 
-    if (j > 0) {
-        while ((j>0) && (q[j-1] <= x)) {
-            d = *t - j; 
-            combine(j, l, r, t, w, v, q, m); 
-            j = *t - d;
-        }
+    while ((j>0) && (q[j-1] <= x)) {
+        d = *t - j; 
+        combine(j, l, r, t, w, v, q, m); 
+        j = *t - d;
     }
 }
 
@@ -176,7 +170,7 @@ TreeNode* init_tree(double* probs, int N, TreeNode*** nodes) {
     m = n;
     t = 1;
 
-    #ifdef DEBUG
+    #ifdef DEBUG_PRINT
         printf("init_tree(): N=%d, n=%d, size=%d\n", N, n, size);
     #endif
 
@@ -191,8 +185,8 @@ TreeNode* init_tree(double* probs, int N, TreeNode*** nodes) {
         (*nodes)[j]->WT = probs[j];
         (*nodes)[j]->label = j;
         (*nodes)[j]->parent = NULL;
-        #ifdef DEBUG
-        printf("created node %d, label=%d, prob=%f\n", j, (*nodes)[j]->label, (*nodes)[j]->WT);
+        #ifdef DEBUG_PRINT
+            printf("created node %d, label=%d, prob=%f\n", j, (*nodes)[j]->label, (*nodes)[j]->WT);
         #endif
     }
 
@@ -203,8 +197,8 @@ TreeNode* init_tree(double* probs, int N, TreeNode*** nodes) {
         (*nodes)[j]->WT = INFINITY;
         (*nodes)[j]->label = j;
         (*nodes)[j]->parent = NULL;
-        #ifdef DEBUG
-        printf("creeated node %d, label=%d, prob=%f\n", j, (*nodes)[j]->label, (*nodes)[j]->WT);
+        #ifdef DEBUG_PRINT
+            printf("created node %d, label=%d, prob=%f\n", j, (*nodes)[j]->label, (*nodes)[j]->WT);
         #endif
     }
 
@@ -214,8 +208,8 @@ TreeNode* init_tree(double* probs, int N, TreeNode*** nodes) {
 
     for (int k = 1; k <= n; k++) {
 
-        #ifdef DEBUG
-        printf ("init_tree() loop: w[k]=%f, k=%d, t=%d, n=%d, m=%d, q[t-1]=%f\n", w[k], k, t, n, m, q[t-1]);
+        #ifdef DEBUG_PRINT
+            printf ("init_tree() loop: w[k]=%f, k=%d, t=%d, n=%d, m=%d, q[t-1]=%f\n", w[k], k, t, n, m, q[t-1]);
         for (int j = 1; j <= t; j++) printf("q[%d]=%f ", j, q[j]); 
         printf("\n");
         #endif
@@ -228,11 +222,11 @@ TreeNode* init_tree(double* probs, int N, TreeNode*** nodes) {
 
     while (t>1) combine(t, l, r, &t, w, v, q, &m);
 
-    #ifdef DEBUG
+    #ifdef DEBUG_PRINT
     for (int i = 0; i <= m; i++) {
         printf ("l[%d]=%d, r[%d]=%d\n", i, l[i], i, r[i]);
     }
-    printf("v[1]=%d\n", v[1]);
+     printf("v[1]=%d\n", v[1]);
     #endif
 
     mark(v[1], 0, d, l, r);
@@ -241,11 +235,11 @@ TreeNode* init_tree(double* probs, int N, TreeNode*** nodes) {
     build(1, d, l, r, &t, &m, nodes);
 
     assign_probs(nodes, n);
-    #ifdef DEBUG
+    #ifdef DEBUG_PRINT
     printf("INIT_TREE FINISHED\n");
     #endif
 
-    #ifdef DEBUG
+    #ifdef DEBUG_PRINT
     for (int j = 0; j <= n; j++) {
         printf("node %d, ", (*nodes)[j]->label);
     }

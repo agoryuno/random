@@ -22,6 +22,8 @@ void destroy_sampler(SamplerState* state);
 
 void restart_sampler(SamplerState* state);
 
+double sum_probs(TreeNode* node);
+
 int sample_wor(SamplerState* state);
 
 #endif //SAMPLE_WOR_H

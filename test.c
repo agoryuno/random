@@ -31,6 +31,7 @@ int main() {
         printf("sampled: %d\n", sample_wor(sampler));
     }
 
+    assert(sum_probs(sampler->root) == 1.0);
     destroy_sampler(sampler);
     //TreeNode* root = init_tree(probs, 10);
     //printf("root label = %d\n", root->label);
