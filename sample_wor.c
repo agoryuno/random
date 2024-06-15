@@ -5,6 +5,17 @@
 #include "sample_wor.h"
 
 
+// find all leaves and return the sum of their 
+// probabilities
+double sum_probs(SamplerState* state) {
+    double cumprob = 0.0;
+    // the leaves are in the first `state->N`
+    // elements of `state->nodes`
+    for (int i = 0; i < state->N; i++) {
+        cumprob += state->nodes[i]->WT;
+    }
+    return cumprob;
+}
 
 // initializes a sampler and returns a pointer
 // to a struct containing the sampler's state
@@ -18,6 +29,8 @@ SamplerState* get_sampler (double* probs, int N) {
     state->left_par = (TreeNode**)malloc(sizeof(TreeNode)*(N*2-1));
     //state->nodes_idx = (int*)malloc(sizeof(int)*(N*2-1));
     TreeNode* root = init_tree(probs, N, &state->nodes);
+
+    state->N = N;
 
     #ifdef DEBUG
     printf( "get_sampler(): tree initialized\n");
@@ -51,25 +64,6 @@ void restart_sampler(SamplerState* state) {
 
 }
 
-
-// find all leaves and return the sum of their 
-// probabilities
-double sum_probs(TreeNode* node) {
-    if (node == NULL) {
-        return 0.0;
-    }
-
-    // Check if the current node is a leaf
-    if (node->LLINK == NULL && node->RLINK == NULL) {
-        return node->WT;
-    }
-
-    // Recursively visit left and right subtrees
-    double left_sum = sum_probs(node->LLINK);
-    double right_sum = sum_probs(node->RLINK);
-    return left_sum + right_sum;
-}
-
 // returns a number between 0 and n-1
 int sample_wor(SamplerState* state) {
 
@@ -82,9 +76,8 @@ int sample_wor(SamplerState* state) {
 
     // Q is the sum of probabilities of all
     // remaining leaves
-    double Q = sum_probs(state->root);
+    double Q = sum_probs(state);
     double rnum = ((double)rand() / RAND_MAX ) * Q; 
-    //double rnum = rand();
     double C = 0.0;
 
     #ifdef DEBUG_PRINT
@@ -118,11 +111,6 @@ int sample_wor(SamplerState* state) {
                 continue;
             } else {
 
-                #ifdef DEBUG_PRINT
-                    printf("  rnum >= G + C (%f + %f = %f\n",
-                        node->G, C, node->G + C);
-                #endif
-
                 if (node->RLINK == NULL) {
 
                     #ifdef DEBUG_PRINT
@@ -132,7 +120,8 @@ int sample_wor(SamplerState* state) {
                     break;
                 } else {
                     #ifdef DEBUG_PRINT
-                        printf("  rlink present\n");
+                        printf("  rnum >= G + C (%f + %f = %f), rlink = %d\n",
+                        node->G, C, node->G + C, node->RLINK->label);
                     #endif
 
                     C += node->G;
@@ -154,10 +143,12 @@ int sample_wor(SamplerState* state) {
         node->label);
     #endif
 
+    #ifdef DEBUG_PRINT
+        printf("Decrementing visited links' G:\n");
+    #endif
     for (int j = 0; j < state->node_idx; j++) {
-        #ifdef DEBUG
-        printf("in for loop, j = %d: \n", j);
-        printf("  state->left_par[j]->label = %d\n", state->left_par[j]->label);
+        #ifdef DEBUG_PRINT
+        printf("    %d: state->left_par[j]->label = %d\n", i, state->left_par[j]->label);
 
         #endif
 

@@ -12,6 +12,7 @@ typedef struct {
     //int** nodes_idx;
     double* probs;
     int N;
+    int size;
     int node_idx;
 
 } SamplerState;
@@ -22,7 +23,7 @@ void destroy_sampler(SamplerState* state);
 
 void restart_sampler(SamplerState* state);
 
-double sum_probs(TreeNode* node);
+double sum_probs(SamplerState* state);
 
 int sample_wor(SamplerState* state);
 
