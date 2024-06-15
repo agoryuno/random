@@ -115,7 +115,7 @@ static void build(
         (*nodes)[j]->RLINK->parent = (*nodes)[j];
         build(b+1, d, l, r, t, m, nodes);
     }
-    #ifdef DEBUG
+    #ifdef DEBUG_PRINT
     printf(" node %d = %d + %d\n", j, l[j], r[j]);
     printf("llink %d prob=%f\n", (*nodes)[j]->LLINK->label, (*nodes)[j]->LLINK->WT);
     printf("rlink %d prob=%f\n", (*nodes)[j]->RLINK->label, (*nodes)[j]->RLINK->WT);
@@ -165,7 +165,6 @@ TreeNode* init_tree(double* probs, int N, TreeNode*** nodes) {
     int v[size]; /* number of node in working region */
     int t; /* current size of working region */
     int m; /* current node */
-    //TreeNode** nodes = (TreeNode**)malloc(sizeof(TreeNode*)*(size));
 
     m = n;
     t = 1;
