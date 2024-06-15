@@ -1,4 +1,4 @@
-#ifdef DEBUG
+#ifdef DEBUG_PRINT
 #include <stdio.h>
 #endif
 
@@ -82,7 +82,6 @@ int sample_wor(SamplerState* state) {
     }
 
     TreeNode* node = state->root;
-    //TreeNode* left_par[ (state->N*2)-1 ];
 
     // Q is the sum of probabilities of all
     // remaining leaves
@@ -147,7 +146,7 @@ int sample_wor(SamplerState* state) {
         
     }
 
-    #ifdef DEBUG
+    #ifdef DEBUG_PRINT
     printf("out of while loop: node_idx = %d, node label = %d\n", 
         state->node_idx,
         node->label);
@@ -175,7 +174,7 @@ int sample_wor(SamplerState* state) {
 
     // increment the sampled counter
     state->sampled++;
-    #ifdef DEBUG
+    #ifdef DEBUG_PRINT
     printf("\n");
     #endif
 
