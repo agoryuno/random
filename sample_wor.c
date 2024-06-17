@@ -38,6 +38,9 @@ double sum_probs(SamplerState* state) {
 //   range (this should be equal to the length of the `probs` array)
 SamplerState* get_sampler_v2(double* probs, int N, 
         TreeNode** nodes, TreeNode** left_par) {
+    if (N<=1) {
+        return NULL;
+    }
     SamplerState* state = malloc(sizeof(SamplerState));
     state->nodes = nodes;
     state->left_par = left_par;
@@ -61,6 +64,9 @@ SamplerState* get_sampler_v2(double* probs, int N,
 // `n` is the total number of integers in the sampled
 //   range (this should be equal to the length of the `probs` array)
 SamplerState* get_sampler (double* probs, int N) {
+    if (N<=1) {
+        return NULL;
+    }
     SamplerState* state = malloc(sizeof(SamplerState));
     state->nodes = malloc(sizeof(TreeNode*)*(N*2-1));
     state->left_par = malloc(sizeof(TreeNode*)*(N*2-1));
