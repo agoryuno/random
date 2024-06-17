@@ -4,7 +4,7 @@
 
 #include "sample_wor.h"
 
-void __destroy_sampler(SamplerState* state, int nodes) {
+static void __destroy_sampler(SamplerState* state, int nodes) {
     destroy_tree(state->root);
 
     if (nodes == 1) {
@@ -61,9 +61,9 @@ SamplerState* get_sampler_v2(double* probs, int N,
 // `n` is the total number of integers in the sampled
 //   range (this should be equal to the length of the `probs` array)
 SamplerState* get_sampler (double* probs, int N) {
-    SamplerState* state = (SamplerState*)malloc(sizeof(SamplerState));
-    state->nodes = (TreeNode**)malloc(sizeof(TreeNode)*(N*2-1));
-    state->left_par = (TreeNode**)malloc(sizeof(TreeNode)*(N*2-1));
+    SamplerState* state = malloc(sizeof(SamplerState));
+    state->nodes = malloc(sizeof(TreeNode*)*(N*2-1));
+    state->left_par = malloc(sizeof(TreeNode*)*(N*2-1));
     TreeNode* root = init_tree(probs, N, &state->nodes);
 
     state->N = N;
