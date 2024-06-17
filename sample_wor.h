@@ -1,6 +1,8 @@
 #ifndef SAMPLE_WOR_H
 #define SAMPLE_WOR_H
 
+#include <stdlib.h>
+
 #include "gw_knuth.h"
 
 
