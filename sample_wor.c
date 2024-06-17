@@ -130,7 +130,7 @@ int sample_wor(SamplerState* state) {
     // Q is the sum of probabilities of all
     // remaining leaves
     double Q = state->Q;
-    double rnum = ((double)random() / RAND_MAX ) * Q; 
+    double rnum = ((double)rand() / RAND_MAX ) * Q; 
     double C = 0.0;
 
     #ifdef DEBUG_PRINT
