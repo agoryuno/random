@@ -4,6 +4,15 @@
 
 #include "sample_wor.h"
 
+void __destroy_sampler(SamplerState* state, int nodes) {
+    destroy_tree(state->root);
+
+    if (nodes == 1) {
+        free(state->nodes);
+        free(state->left_par);
+    }
+    free(state);
+}
 
 // find all leaves and return the sum of their 
 // probabilities
@@ -18,6 +27,34 @@ double sum_probs(SamplerState* state) {
 }
 
 // initializes a sampler and returns a pointer
+// to a struct containing the sampler's state.
+// Uses `nodes` and `left_par` arrays supplied by
+// the caller, who is responsible for allocating and 
+// disposing of them, ensuring that their size is greater
+// than or equal to `N`*2-1
+// `probs` is a pointer to an array of probabilities
+//   that sum to 1 and represent sampling weights
+// `N` is the total number of integers in the sampled
+//   range (this should be equal to the length of the `probs` array)
+SamplerState* get_sampler_v2(double* probs, int N, 
+        TreeNode** nodes, TreeNode** left_par) {
+    SamplerState* state = malloc(sizeof(SamplerState));
+    state->nodes = nodes;
+    state->left_par = left_par;
+    TreeNode* root = init_tree(probs, N, &state->nodes);
+
+    state->N = N;
+    state->sampled = 0;
+    state->Q = sum_probs(state);
+    state->root = root;
+    state->probs = probs;
+    state->N = N;
+    state->node_idx = 0;
+
+    return state;
+}
+
+// initializes a sampler and returns a pointer
 // to a struct containing the sampler's state
 // `probs` is a pointer to an array of probabilities
 //   that sum to 1 and represent sampling weights
@@ -27,7 +64,6 @@ SamplerState* get_sampler (double* probs, int N) {
     SamplerState* state = (SamplerState*)malloc(sizeof(SamplerState));
     state->nodes = (TreeNode**)malloc(sizeof(TreeNode)*(N*2-1));
     state->left_par = (TreeNode**)malloc(sizeof(TreeNode)*(N*2-1));
-    //state->nodes_idx = (int*)malloc(sizeof(int)*(N*2-1));
     TreeNode* root = init_tree(probs, N, &state->nodes);
 
     state->N = N;
@@ -49,14 +85,16 @@ SamplerState* get_sampler (double* probs, int N) {
     return state;
 }
 
-
-// call this when you are done with the sampler
-// to free its memory
+// Call this to destroy the sampler created with
+// get_sampler(). 
 void destroy_sampler(SamplerState* state) {
-    destroy_tree(state->root);
-    free(state->nodes);
-    free(state->left_par);
-    free(state);
+    __destroy_sampler(state, 1);
+}
+
+// Call this to destroy the sampler created with
+// get_sampler_v2().
+void destroy_sampler_v2(SamplerState* state) {
+    __destroy_sampler(state, 0);
 }
 
 // restarts the sampler by restoring its initial state 
