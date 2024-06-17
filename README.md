@@ -15,3 +15,9 @@ Note, that by default the sampler will crash the program if you try to sample mo
 Also note, that currently there is no way to reset the sampler object to its initial state. This is because the specific application this was built for doesn't require that functionality. This means that once you've sampled `N` values, you need to `destroy_sampler(SamplerState* state)` your current sampler and create a new one.
 
 For an example of using the sampler see `test.c`.
+
+# Using with permanent arrays
+
+You can also pass two arrays typed as `TreeNode**` of size greater than or equal to `N` as arguments to `get_sampler_v2()`. These arrays will be used instead of the ones that are allocated and destroyed by the `get_sampler()` version. This is intended for cases where you need to recreate the sampler many times and don't want to overuse malloc.
+
+A sampler created with `get_sampler_v2()` must be destroyed with `destroy_sampler_v2()`, which preserves external arrays.
