@@ -18,6 +18,6 @@ For an example of using the sampler see `test.c`.
 
 # Using with permanent arrays
 
-You can also pass two arrays typed as `TreeNode**` of size greater than or equal to `N` as arguments to `get_sampler_v2()`. These arrays will be used instead of the ones that are allocated and destroyed by the `get_sampler()` version. This is intended for cases where you need to recreate the sampler many times and don't want to overuse malloc.
+You can also pass two arrays typed as `TreeNode**` of size greater than or equal to `N*2-1` as arguments to `get_sampler_v2()`. These arrays will be used instead of the ones that are allocated and destroyed by the `get_sampler()` version. This is intended for cases where you need to recreate the sampler many times and don't want to overuse malloc.
 
 A sampler created with `get_sampler_v2()` must be destroyed with `destroy_sampler_v2()`, which preserves external arrays.
