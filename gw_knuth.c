@@ -190,7 +190,7 @@ TreeNode* init_tree(double* probs, int N, TreeNode*** nodes) {
     }
 
     for (int j = m+1; j <= 2*n; j++ ) {
-        (*nodes)[j] = (TreeNode*)malloc(sizeof(TreeNode));
+        (*nodes)[j] = malloc(sizeof(TreeNode));
         (*nodes)[j]->LLINK = NULL;
         (*nodes)[j]->RLINK = NULL;
         (*nodes)[j]->WT = INFINITY;
